@@ -30,7 +30,7 @@ jobs:
         run: npm run typecheck
       - name: Test (full suite — includes the §9 conformance run)
         run: npm test
-      - name: Conformance (§9 — 21 vectors × both reference stores: fake + SqliteStore)
+      - name: Conformance (§9 — 21 vectors × both reference stores — fake + SqliteStore)
         run: npm run conformance
       - name: Lint
         run: npm run lint
