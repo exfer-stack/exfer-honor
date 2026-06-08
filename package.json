@@ -16,7 +16,8 @@
     "./forms": "./src/forms/index.ts",
     "./core": "./src/core/index.ts",
     "./adapters": "./src/adapters/index.ts",
-    "./conformance": "./src/conformance/index.ts"
+    "./conformance": "./src/conformance/index.ts",
+    "./service": "./src/service/index.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",

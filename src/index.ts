@@ -13,3 +13,7 @@ export * from "./spec/index.js";
 export * from "./ports/index.js";
 export * from "./forms/index.js";
 export * from "./core/index.js";
+
+// Stage-E ergonomic façade — a THIN convenience layer ON TOP of the core. The five
+// ports + `createHonorEngine` above stay first-class; the façade does not hide them.
+export * from "./service/index.js";
