@@ -12,18 +12,39 @@
   "exports": {
     ".": "./src/index.ts",
     "./spec": "./src/spec/index.ts",
-    "./ports": "./src/ports/index.ts"
+    "./ports": "./src/ports/index.ts",
+    "./forms": "./src/forms/index.ts",
+    "./core": "./src/core/index.ts",
+    "./adapters": "./src/adapters/index.ts",
+    "./conformance": "./src/conformance/index.ts"
   },
   "scripts": {
     "build": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
     "test": "tsx --test \"src/**/*.test.ts\"",
+    "conformance": "tsx --test \"src/conformance/*.test.ts\"",
     "lint": "biome lint .",
     "format-check": "biome format ."
   },
+  "peerDependencies": {
+    "better-sqlite3": ">=11",
+    "pg": ">=8"
+  },
+  "peerDependenciesMeta": {
+    "better-sqlite3": {
+      "optional": true
+    },
+    "pg": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
+    "@types/better-sqlite3": "^7.6.13",
     "@types/node": "^22.7.4",
+    "@types/pg": "^8.20.0",
+    "better-sqlite3": "^11.10.0",
+    "pg": "^8.21.0",
     "tsx": "^4.19.1",
     "typescript": "^5.6.2"
   }

@@ -11,3 +11,5 @@
 
 export * from "./spec/index.js";
 export * from "./ports/index.js";
+export * from "./forms/index.js";
+export * from "./core/index.js";

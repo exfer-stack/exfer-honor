@@ -1,15 +1,15 @@
 name: CI
 
 # Mirrors the ecosystem gates (exfer-py / exfer-swap): typecheck + test + lint +
-# format-check, all required to merge. The §9 conformance-vector corpus and the
-# reference-store runs land as later stages add the engine and adapters; the
-# structure tests already validate the vector fixtures here.
+# format-check, all required to merge. Stage 6 wires the §9 conformance harness:
+# the 21-vector corpus now EXECUTES against BOTH reference stores (the in-memory
+# fake AND the real SqliteStore) and runs on EVERY push (all branches) + every PR.
+# The conformance run is part of `npm test`; the dedicated `npm run conformance`
+# step makes the §9 both-reference-stores gate explicit and visible in CI.
 
 on:
   push:
-    branches: [main]
   pull_request:
-    branches: [main]
 
 jobs:
   check:
@@ -24,10 +24,12 @@ jobs:
           cache: "npm"
       - name: Install
         run: npm ci
-      - name: Typecheck (strict — includes the F8 type-error test)
+      - name: Typecheck (strict — includes the F8 type-error test, deliver.test-d.ts)
         run: npm run typecheck
-      - name: Test
+      - name: Test (full suite — includes the §9 conformance run)
         run: npm test
+      - name: Conformance (§9 — 21 vectors × both reference stores: fake + SqliteStore)
+        run: npm run conformance
       - name: Lint
         run: npm run lint
       - name: Format check

@@ -8,13 +8,23 @@
 
 import type {
   AcceptedQuote,
+  Hex,
   HonorVerdict,
+  PubKey,
   SettlementFormId,
   WaitReason,
 } from "../spec/index.js";
 import type { ChainSource, RawSettlementCandidate } from "./chain.js";
 import type { KeyCustody } from "./custody.js";
 import type { GateMode } from "./store.js";
+
+/**
+ * Derives the expected output script (bare lowercase hex) committing to a pubkey
+ * under the EXFER-ADDR domain (§6.1 step 4). INJECTABLE so the library never
+ * bakes in a specific on-chain script format; a consumer wires the deriver its
+ * chain actually uses. Optional — a reference derivation is used when absent.
+ */
+export type AddressDeriver = (pubkey: PubKey) => Hex;
 
 /**
  * HonorConfig: the tuning constants every form / the scorer reads (§4). Frozen
@@ -28,6 +38,12 @@ export interface HonorConfig {
   readonly maxRecheckWindow: number; // R6 late-honor window, seconds
   readonly payerBinding: "consent" | "source"; // R5 default mode (D3)
   readonly requirePayerFunded: boolean; // opt into SOURCE binding (D3)
+  /**
+   * R4 address binding: derives domain_hash(EXFER-ADDR, pubkey). OPTIONAL
+   * additive field (§3.7, no API bump); a reference derivation is used when
+   * absent. Production consumers MUST inject the deriver their chain uses.
+   */
+  readonly addressDeriver?: AddressDeriver;
 }
 
 export interface ScoringCtx {

@@ -51,14 +51,24 @@ export class HonorError extends Error {
  * Raised inside the gate txn when a write-ahead invariant is violated. A
  * concurrent honor of the same quote raises this; `honor()` catches it AFTER
  * the txn has rolled back and converts it to the benign value
- * not_ready{decline:'already_honored'|'outpoint_consumed'} (§3.6 dual-typing
- * rule). It surfaces as a thrown HonorError only on the advanced direct-Store
- * path.
+ * not_ready{decline:'already_honored'|'expired_unobserved'|'outpoint_consumed'}
+ * (§3.6 dual-typing rule). It surfaces as a thrown HonorError only on the
+ * advanced direct-Store path.
+ *
+ * Kinds (the engine maps each to a distinct DeclineReason):
+ *  - 'seen-already-honored' → 'already_honored'  (honored_at already set; F3 re-honor)
+ *  - 'expired-window'       → 'expired_unobserved' (§5.9: now >= retainUntil, OR a
+ *      late-honor — now >= expiresAt — without observed_before_expiry; re-validated
+ *      at commit time, §5.8/F10).
+ *  - 'outpoint-consumed'    → 'outpoint_consumed' (CONSUMED PK collision / promote miss)
  */
 export class GateViolation extends Error {
-  readonly kind: "seen-already-honored" | "outpoint-consumed";
+  readonly kind: "seen-already-honored" | "expired-window" | "outpoint-consumed";
 
-  constructor(kind: "seen-already-honored" | "outpoint-consumed", message: string) {
+  constructor(
+    kind: "seen-already-honored" | "expired-window" | "outpoint-consumed",
+    message: string,
+  ) {
     super(message);
     this.name = "GateViolation";
     this.kind = kind;

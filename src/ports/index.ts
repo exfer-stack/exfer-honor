@@ -19,6 +19,7 @@ export type {
 export type { KeyCustody, Clock, Logger } from "./custody.js";
 
 export type {
+  AddressDeriver,
   HonorConfig,
   ScoringCtx,
   PrepareResult,

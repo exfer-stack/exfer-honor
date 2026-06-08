@@ -12,6 +12,7 @@ import type {
   PubKey,
   QuoteId,
   SettlementCandidate,
+  SettlementFormId,
   TxnModel,
 } from "../spec/index.js";
 
@@ -22,10 +23,23 @@ export interface SeenRow {
   payeePubkey: PubKey;
   payerPubkey: PubKey | null;
   exferAmount: bigint;
+  /**
+   * Which form owns this quote (§6.1 step 1: `discover() candidates for
+   * quote.form`). Persisted by `upsertAccepted` from `AcceptedQuote.form` so the
+   * engine can pick the strategy without a second round-trip. Additive over the
+   * frozen R6 record (no HONOR_API_VERSION bump, §3.7).
+   */
+  form: SettlementFormId;
   acceptedAt: number;
   expiresAt: number;
   observedBeforeExpiry: boolean;
   honoredAt: number | null;
+  /**
+   * The outpoint consumed at honor, persisted by `runHonorTxn` alongside
+   * `honored_at` so `status` can report the `honored` state's outpoint without a
+   * chain re-read. Null until honored. Additive optional (§3.7).
+   */
+  honoredOutpoint?: Outpoint | null;
   retainUntil: number;
 }
 
