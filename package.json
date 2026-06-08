@@ -22,10 +22,12 @@
   "scripts": {
     "build": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
+    "typecheck:example": "tsc --noEmit -p examples/merchant/tsconfig.json",
     "test": "tsx --test \"src/**/*.test.ts\"",
     "conformance": "tsx --test \"src/conformance/*.test.ts\"",
     "lint": "biome lint .",
-    "format-check": "biome format ."
+    "format-check": "biome format .",
+    "demo": "tsx examples/merchant/demo.ts"
   },
   "peerDependencies": {
     "better-sqlite3": ">=11",

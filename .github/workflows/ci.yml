@@ -28,6 +28,8 @@ jobs:
         run: npm ci
       - name: Typecheck (strict — includes the F8 type-error test, deliver.test-d.ts)
         run: npm run typecheck
+      - name: Typecheck example (agent ↔ API merchant demo — separate tsconfig, not in the published build)
+        run: npm run typecheck:example
       - name: Test (full suite — includes the §9 conformance run)
         run: npm test
       - name: Conformance (§9 — 21 vectors × both reference stores — fake + SqliteStore)
