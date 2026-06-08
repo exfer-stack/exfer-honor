@@ -1,0 +1,15 @@
+{
+  "id": "payee/not-controlled",
+  "title": "controlsPayee=false declines; keystore throw is retryable, not a decline (M3/R2)",
+  "rules": ["M3", "R2"],
+  "datumVersion": 1,
+  "fixture": {
+    "cases": [
+      { "keystore": { "controlsPayee": false }, "expectVerdict": { "decision": "decline", "reason": "payee_not_controlled" } },
+      { "keystore": { "controlsPayee": "throw" }, "expectThrow": { "code": "keystore_fault", "retryable": true } }
+    ]
+  },
+  "expect": {
+    "note": "definitive negative ⇒ decline; unavailability ⇒ retryable fault, never a decline"
+  }
+}

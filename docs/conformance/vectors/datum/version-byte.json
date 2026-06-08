@@ -1,0 +1,14 @@
+{
+  "id": "datum/version-byte",
+  "title": "a v2-encoded datum MUST NOT decode under v1",
+  "rules": ["D5"],
+  "datumVersion": 1,
+  "fixture": {
+    "rawDatumHex": "0123456789abcdef0123456789abcdef",
+    "decodeUnderVersion": 2,
+    "note": "well-formed 16 bytes, but decoder asked for an unknown version"
+  },
+  "expect": {
+    "decode": { "ok": false, "reason": "unknown_version" }
+  }
+}

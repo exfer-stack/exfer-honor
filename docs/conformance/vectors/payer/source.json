@@ -1,0 +1,14 @@
+{
+  "id": "payer/source",
+  "title": "R5 SOURCE binding: payer-keyed prevouts must fund; covenant-only fails",
+  "rules": ["R5", "D3"],
+  "datumVersion": 1,
+  "fixture": {
+    "config": { "payerBinding": "source", "requirePayerFunded": true },
+    "cases": [
+      { "prevoutsKeyedToPayer": true, "expectVerdict": { "decision": "honor" } },
+      { "prevoutsKeyedToPayer": false, "covenantOnly": true, "expectVerdict": { "decision": "decline", "reason": "payer_binding_failed" } }
+    ]
+  },
+  "expect": { "note": "covenant/script-only-funded payers always rejected" }
+}

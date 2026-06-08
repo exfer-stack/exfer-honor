@@ -1,0 +1,13 @@
+{
+  "id": "deliver/out-of-band-handle",
+  "title": "goods written on a separate connection → store_topology/contract_violation (F12)",
+  "rules": ["F12"],
+  "datumVersion": 1,
+  "fixture": {
+    "store": { "txnModel": "sync" },
+    "goodsWrittenVia": "separate better-sqlite3 Database (not DeliverContext.db)"
+  },
+  "expect": {
+    "throw": { "code": "store_topology" }
+  }
+}

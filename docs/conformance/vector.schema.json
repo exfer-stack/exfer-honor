@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://exfer.dev/honor/conformance/vector.schema.json",
+  "title": "exfer-honor conformance vector",
+  "description": "A single { fixture, expect } scenario. Open-ended fixture/expect bodies so a new rule or closed hole ships as a new vector with no schema change (design §9).",
+  "type": "object",
+  "required": ["id", "rules", "fixture", "expect"],
+  "additionalProperties": false,
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Stable vector id, e.g. 'plain/happy'.",
+      "pattern": "^[a-z0-9]+/[a-z0-9-]+$"
+    },
+    "title": { "type": "string" },
+    "rules": {
+      "type": "array",
+      "description": "The R-rules / F-/M-holes this vector pins.",
+      "items": { "type": "string", "pattern": "^[RFMD][0-9]+$" },
+      "minItems": 1
+    },
+    "datumVersion": {
+      "type": "integer",
+      "description": "SETTLEMENT_DATUM_VERSION this vector exercises.",
+      "minimum": 1
+    },
+    "compileTimeOnly": {
+      "type": "boolean",
+      "description": "true ⇒ enforced by the typecheck gate (F8 type test), not the runtime harness.",
+      "default": false
+    },
+    "fixture": {
+      "type": "object",
+      "description": "Open-ended scenario inputs: quote, candidates, datum, chain/keystore/clock fakes."
+    },
+    "expect": {
+      "type": "object",
+      "description": "Open-ended expectations: verdict/outcome, gate row state, delivery count.",
+      "properties": {
+        "deliveries": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Exact number of times deliver() is invoked (idempotency / single-honor)."
+        }
+      }
+    }
+  }
+}

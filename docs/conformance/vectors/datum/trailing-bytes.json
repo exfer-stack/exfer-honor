@@ -1,0 +1,14 @@
+{
+  "id": "datum/trailing-bytes",
+  "title": "16-byte quote_id with trailing bytes is rejected (zero-trailing)",
+  "rules": ["F1", "R7"],
+  "datumVersion": 1,
+  "fixture": {
+    "rawDatumHex": "0123456789abcdef0123456789abcdefdeadbeef",
+    "note": "16-byte quote_id + 4 trailing bytes"
+  },
+  "expect": {
+    "decode": { "ok": false, "reason": "wrong_length" },
+    "verdict": { "decision": "decline", "reason": "datum_unhonorable" }
+  }
+}

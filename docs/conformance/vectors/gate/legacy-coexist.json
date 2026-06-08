@@ -1,0 +1,15 @@
+{
+  "id": "gate/legacy-coexist",
+  "title": "no zero-gate path can re-consume a gated outpoint (M4)",
+  "rules": ["M4"],
+  "datumVersion": 1,
+  "fixture": {
+    "quoteId": "0123456789abcdef0123456789abcdef",
+    "outpoint": { "txId": "aa00", "outputIndex": 0 },
+    "note": "outpoint already consumed via the single honor path; only one honor path exists"
+  },
+  "expect": {
+    "verdict": { "decision": "decline", "reason": "outpoint_consumed" },
+    "deliveries": 0
+  }
+}

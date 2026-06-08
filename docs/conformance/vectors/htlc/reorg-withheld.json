@@ -1,0 +1,16 @@
+{
+  "id": "htlc/reorg-withheld",
+  "title": "claim un-mined by reorg → reorg_withheld, no premature honor (R3)",
+  "rules": ["R3"],
+  "datumVersion": 1,
+  "fixture": {
+    "form": "htlc",
+    "claimMargin": 19,
+    "claimSeenAtDepth": 19,
+    "thenReorgDropsDepthTo": 4
+  },
+  "expect": {
+    "verdict": { "decision": "wait", "reason": "reorg_withheld" },
+    "deliveries": 0
+  }
+}

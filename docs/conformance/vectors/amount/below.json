@@ -1,0 +1,14 @@
+{
+  "id": "amount/below",
+  "title": "value below exferAmount declines amount_mismatch (never >=)",
+  "rules": ["R4", "D4"],
+  "datumVersion": 1,
+  "fixture": {
+    "exferAmount": "100000000",
+    "candidateValue": "99999999"
+  },
+  "expect": {
+    "verdict": { "decision": "decline", "reason": "amount_mismatch" },
+    "deliveries": 0
+  }
+}

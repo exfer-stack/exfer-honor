@@ -1,0 +1,15 @@
+{
+  "id": "r6/swept-mid-honor",
+  "title": "sweep vs honor contend on the same row → no double, correct decline (F10)",
+  "rules": ["F10", "R6"],
+  "datumVersion": 1,
+  "fixture": {
+    "interleave": "sweep() deletes the SEEN row mid-honor between scoring read and runHonorTxn",
+    "now": 3000,
+    "retainUntil": 2600
+  },
+  "expect": {
+    "verdict": { "decision": "decline", "reason": "expired_unobserved" },
+    "deliveries": 0
+  }
+}

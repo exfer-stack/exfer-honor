@@ -1,0 +1,14 @@
+{
+  "id": "datum/multi-id-reject",
+  "title": "32-byte datum carrying two quote_ids is rejected (F1 multi-id)",
+  "rules": ["F1", "R7"],
+  "datumVersion": 1,
+  "fixture": {
+    "rawDatumHex": "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+    "note": "32 bytes = two concatenated 16-byte quote_ids; one payment must NOT satisfy two quotes"
+  },
+  "expect": {
+    "decode": { "ok": false, "reason": "wrong_length" },
+    "verdict": { "decision": "decline", "reason": "datum_unhonorable" }
+  }
+}

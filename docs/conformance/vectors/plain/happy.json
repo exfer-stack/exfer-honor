@@ -1,0 +1,39 @@
+{
+  "id": "plain/happy",
+  "title": "single confirmed exact-amount plain output honors exactly once",
+  "rules": ["R1", "R4"],
+  "datumVersion": 1,
+  "fixture": {
+    "quote": {
+      "quoteId": "0123456789abcdef0123456789abcdef",
+      "signerPubkey": "11111111111111111111111111111111111111111111111111111111111111aa",
+      "payeePubkey": "22222222222222222222222222222222222222222222222222222222222222bb",
+      "payerPubkey": null,
+      "exferAmount": "100000000",
+      "expiresAt": 2000,
+      "issuedAt": 1000,
+      "form": "plain"
+    },
+    "tip": 120,
+    "now": 1500,
+    "candidates": [
+      {
+        "form": "plain",
+        "quoteId": "0123456789abcdef0123456789abcdef",
+        "txId": "aa00",
+        "outputIndex": 0,
+        "value": "100000000",
+        "scriptHex": "76a914payeebb88ac",
+        "blockHeight": 100,
+        "honorable": true
+      }
+    ],
+    "keystore": { "controlsPayee": true }
+  },
+  "expect": {
+    "verdict": { "decision": "honor" },
+    "outcome": { "status": "honored", "outpoint": { "txId": "aa00", "outputIndex": 0 } },
+    "deliveries": 1,
+    "gate": { "honoredAt": "set", "outpointState": "honored" }
+  }
+}

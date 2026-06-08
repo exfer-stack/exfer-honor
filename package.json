@@ -1,0 +1,30 @@
+{
+  "name": "exfer-honor",
+  "version": "0.1.0",
+  "description": "Standalone, reusable, extensible TypeScript standard library for EXFER-QUOTE honor — turns a post-ACCEPT credential + on-chain settlement facts into a safe, idempotent, atomically-gated \"honor goods now\" decision.",
+  "type": "module",
+  "license": "MIT",
+  "keywords": ["exfer", "honor", "exfer-quote", "settlement", "crypto", "atomic"],
+  "author": "exfer-stack",
+  "engines": {
+    "node": ">=20"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./spec": "./src/spec/index.ts",
+    "./ports": "./src/ports/index.ts"
+  },
+  "scripts": {
+    "build": "tsc --noEmit",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test \"src/**/*.test.ts\"",
+    "lint": "biome lint .",
+    "format-check": "biome format ."
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "@types/node": "^22.7.4",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.2"
+  }
+}

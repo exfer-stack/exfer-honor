@@ -1,0 +1,13 @@
+{
+  "id": "payer/consent",
+  "title": "R5 CONSENT binding (default) passes when payer consent recorded at ACCEPT",
+  "rules": ["R5", "D3"],
+  "datumVersion": 1,
+  "fixture": {
+    "config": { "payerBinding": "consent", "requirePayerFunded": false },
+    "payerPubkey": "33333333333333333333333333333333333333333333333333333333333333cc"
+  },
+  "expect": {
+    "verdict": { "decision": "honor" }
+  }
+}

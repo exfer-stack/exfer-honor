@@ -1,0 +1,14 @@
+{
+  "id": "recovery/async-ambiguous-commit",
+  "title": "async ambiguous-commit: re-invoke deliver for honored-but-unproven row (F9)",
+  "rules": ["F9"],
+  "datumVersion": 1,
+  "fixture": {
+    "txnModel": "async",
+    "commitOutcome": "ambiguous (connection loss after BEGIN/writes)"
+  },
+  "expect": {
+    "note": "honor() MUST re-invoke deliver for a honored-gate row whose paired delivery is not provably durable, not decline already_honored",
+    "deliverIdempotent": true
+  }
+}

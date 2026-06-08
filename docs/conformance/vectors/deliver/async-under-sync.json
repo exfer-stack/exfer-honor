@@ -1,0 +1,16 @@
+{
+  "id": "deliver/async-under-sync",
+  "title": "async deliver under a sync store does NOT compile + runtime guard throws (F8)",
+  "rules": ["F8"],
+  "datumVersion": 1,
+  "compileTimeOnly": true,
+  "fixture": {
+    "store": { "txnModel": "sync" },
+    "deliver": "async",
+    "enforcedBy": "src/spec/deliver.test-d.ts (typecheck gate) + in-txn then-check throw"
+  },
+  "expect": {
+    "compile": "error",
+    "runtimeGuard": { "code": "contract_violation" }
+  }
+}

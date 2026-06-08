@@ -1,0 +1,19 @@
+{
+  "id": "gate/two-outpoints",
+  "title": "one quote_id in two outputs: first honors, second declines already_honored (F3)",
+  "rules": ["F3", "R1"],
+  "datumVersion": 1,
+  "fixture": {
+    "quoteId": "0123456789abcdef0123456789abcdef",
+    "candidates": [
+      { "txId": "aa00", "outputIndex": 0, "value": "100000000", "blockHeight": 100, "honorable": true },
+      { "txId": "bb11", "outputIndex": 3, "value": "100000000", "blockHeight": 101, "honorable": true }
+    ],
+    "honorCalls": 2
+  },
+  "expect": {
+    "firstOutcome": { "status": "honored" },
+    "secondOutcome": { "status": "not_ready", "verdict": { "decision": "decline", "reason": "already_honored" } },
+    "deliveries": 1
+  }
+}

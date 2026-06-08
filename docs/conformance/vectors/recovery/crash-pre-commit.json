@@ -1,0 +1,14 @@
+{
+  "id": "recovery/crash-pre-commit",
+  "title": "crash before COMMIT writes nothing; clean retry (F9 sync model)",
+  "rules": ["F9"],
+  "datumVersion": 1,
+  "fixture": {
+    "txnModel": "sync",
+    "crashAt": "before-commit"
+  },
+  "expect": {
+    "gate": { "honoredAt": "null", "outpointRow": "absent" },
+    "retry": { "verdict": { "decision": "honor" }, "deliveries": 1 }
+  }
+}

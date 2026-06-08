@@ -1,0 +1,18 @@
+{
+  "id": "htlc/two-phase",
+  "title": "HTLC Phase A reserve → Phase B promote → exactly one delivery (F13/R3)",
+  "rules": ["F13", "R3"],
+  "datumVersion": 1,
+  "fixture": {
+    "form": "htlc",
+    "phaseA": { "action": "reserveClaimOutpoint", "state": "claim_pending", "claimTxId": "claim01" },
+    "phaseB": { "mode": "promote", "claimDepth": 19, "claimMargin": 19 },
+    "ticks": 3
+  },
+  "expect": {
+    "phaseAVerdict": { "decision": "wait", "reason": "htlc_claim_pending" },
+    "phaseBOutcome": { "status": "honored" },
+    "outpointState": "honored",
+    "deliveries": 1
+  }
+}

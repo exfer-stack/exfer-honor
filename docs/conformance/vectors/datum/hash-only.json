@@ -1,0 +1,14 @@
+{
+  "id": "datum/hash-only",
+  "title": "datum_hash-only output is unhonorable; no address+amount fallback (M2)",
+  "rules": ["M2", "R7"],
+  "datumVersion": 1,
+  "fixture": {
+    "outputDatum": { "quoteIdHex": null, "honorable": false },
+    "note": "inline datum absent; indexer flags honorable:false"
+  },
+  "expect": {
+    "verdict": { "decision": "decline", "reason": "datum_unhonorable" },
+    "deliveries": 0
+  }
+}

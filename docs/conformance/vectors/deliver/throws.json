@@ -1,0 +1,15 @@
+{
+  "id": "deliver/throws",
+  "title": "deliver() throws → gate rolled back, delivery_failed (F11)",
+  "rules": ["F11"],
+  "datumVersion": 1,
+  "fixture": {
+    "deliver": "throw",
+    "form": "plain"
+  },
+  "expect": {
+    "outcome": { "status": "delivery_failed", "retryable": true },
+    "gate": { "honoredAt": "null", "outpointRow": "absent" },
+    "deliveries": 0
+  }
+}

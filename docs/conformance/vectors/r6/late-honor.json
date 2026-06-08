@@ -1,0 +1,16 @@
+{
+  "id": "r6/late-honor",
+  "title": "observed-before-expiry honors within window; first-seen-after-expiry declines",
+  "rules": ["R6"],
+  "datumVersion": 1,
+  "fixture": {
+    "expiresAt": 2000,
+    "maxRecheckWindow": 600,
+    "retainUntil": 2600,
+    "cases": [
+      { "observedBeforeExpiry": true, "now": 2300, "expectVerdict": { "decision": "honor" } },
+      { "observedBeforeExpiry": false, "now": 2300, "expectVerdict": { "decision": "decline", "reason": "expired_unobserved" } }
+    ]
+  },
+  "expect": { "note": "late-honor predicate re-asserted at commit-time now (F10)" }
+}
