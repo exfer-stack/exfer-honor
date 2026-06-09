@@ -1,10 +1,10 @@
 # EXFER-HONOR — Standard Specification (v1)
 
-**Status:** Frozen standard (Stage 2). **API version:** `HONOR_API_VERSION = 1`.
+**Status:** Frozen standard. **API version:** `HONOR_API_VERSION = 1`.
 **Datum version:** `SETTLEMENT_DATUM_VERSION = 1`.
 
-This document is the normative, machine-checkable companion to the design
-(`EXFER_HONOR_DESIGN.md`). The TypeScript declarations in `src/spec` and
+This document is the normative, machine-checkable specification. The TypeScript
+declarations in `src/spec` and
 `src/ports` are the executable form of these clauses; this prose is the law they
 encode. RFC-2119 keywords (**MUST / MUST NOT / SHOULD / MAY**) are normative.
 

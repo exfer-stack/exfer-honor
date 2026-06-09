@@ -13,7 +13,7 @@ decision — without owning the consumer's goods system, DB, or chain access.
 
 ## Quickstart — ~10 lines (the ergonomic façade)
 
-The Stage-E **`createHonorService`** façade collapses the common-case integration:
+The **`createHonorService`** façade collapses the common-case integration:
 it wires the SQLite gate, the indexer/node chain source, the walletd verifier +
 key-custody, and the plain/htlc forms, then drives the **observe → honor** loop on
 a timer. `onPaid(quote, deliver)` runs your **synchronous** `deliver` inside the
@@ -57,7 +57,7 @@ or your goods.
 ## Status — complete and conformance-green
 
 The full library is implemented and green on `main` (typecheck · test ·
-conformance · lint · format); see the [design](../EXFER_HONOR_DESIGN.md):
+conformance · lint · format), organized as:
 
 - **`/spec`** — the frozen standard: version constants, canonical value types,
   closed verdict/outcome enums, branded hex types, the error model, and the

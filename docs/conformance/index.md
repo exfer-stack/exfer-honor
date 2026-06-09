@@ -2,14 +2,13 @@
 
 The frozen scenario list any `exfer-honor` implementation MUST pass (design §9).
 Each vector is a `{ fixture, expect }` record (open-ended schema — a new
-rule/hole ships as a new vector with **no type change**). At Stage 2 the vectors
-are **declarative fixtures**, validated for structure; the executable
-`Conformance.check(engine, vector)` harness lands in Stage 6 and exercises them
-against the in-memory fakes and both reference stores.
+rule/hole ships as a new vector with **no type change**). The executable
+`Conformance.check(engine, vector)` harness runs every vector against the
+in-memory fakes and both reference stores.
 
 The shared shape is documented in [`vector.schema.json`](./vector.schema.json)
-and mirrored by the `ConformanceVector` type in
-`src/spec` consumers / the Stage-6 harness. Each vector file lives under
+and mirrored by the `ConformanceVector` type that the harness and `src/spec`
+consumers share. Each vector file lives under
 `vectors/<group>/<name>.json`.
 
 ## Mandatory corpus
