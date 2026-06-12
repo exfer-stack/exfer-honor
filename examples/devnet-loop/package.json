@@ -1,0 +1,19 @@
+{
+  "name": "exfer-honor-devnet-loop-example",
+  "private": true,
+  "type": "module",
+  "description": "Agent-to-agent closed loop on an isolated exfer devnet: mine → quote → settle → honor, real stack end to end.",
+  "scripts": {
+    "demo": "./run-demo.sh",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "exfer-honor": "file:../.."
+  },
+  "devDependencies": {
+    "better-sqlite3": "^11.10.0",
+    "@types/better-sqlite3": "^7.6.13",
+    "tsx": "^4.19.1",
+    "typescript": "^5.6.2"
+  }
+}
