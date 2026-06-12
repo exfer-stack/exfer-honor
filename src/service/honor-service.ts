@@ -46,6 +46,7 @@ import type {
   TxnModel,
 } from "../spec/index.js";
 import type {
+  AddressDeriver,
   ChainSource,
   Clock,
   HonorConfig,
@@ -99,6 +100,13 @@ export interface HonorServiceConfig {
   readonly payerBinding?: "consent" | "source";
   readonly requirePayerFunded?: boolean;
   readonly pollIntervalMs?: number;
+  /** the REAL chain address derivation (R4 binding: `scriptHex ===
+   *  domainHashAddr(payeePubkey)`). Production consumers MUST inject this —
+   *  without it the forms fall back to the library's structural placeholder,
+   *  which never matches a real on-chain script (every candidate declines
+   *  with `address_mismatch`). Forwarded to both the forms (HonorConfig) and
+   *  the walletd KeyCustody adapter so the two agree on one derivation. */
+  readonly addressDeriver?: AddressDeriver;
 
   // -- advanced port injection (testing / custom transports). DO NOT hide. ----
   /** override the ChainSource (e.g. a fake in tests). */
@@ -373,10 +381,14 @@ export async function createHonorService(
       claimSubmit: config.claimSubmit,
     });
 
-  // KeyCustody: R2/M3 payee custody test-sign over walletd.
+  // KeyCustody: R2/M3 payee custody test-sign over walletd. Shares the SAME
+  // address derivation as the forms' R4 binding.
   const keys: KeyCustody =
     config.keyCustody ??
-    new KeystoreKeyCustody({ walletd: toRpc(config.walletd, token) });
+    new KeystoreKeyCustody({
+      walletd: toRpc(config.walletd, token),
+      addressDeriver: config.addressDeriver,
+    });
 
   // ACCEPT bridge (advanced; `onPaid` takes an already-accepted quote).
   const verifier = config.verifier ?? new WalletdVerifier(toRpc(config.walletd, token));
@@ -393,6 +405,7 @@ export async function createHonorService(
     maxRecheckWindow: config.maxRecheckWindow ?? DEFAULT_MAX_RECHECK_WINDOW,
     payerBinding: config.payerBinding ?? DEFAULT_PAYER_BINDING,
     requirePayerFunded: config.requirePayerFunded ?? false,
+    addressDeriver: config.addressDeriver,
   };
 
   // plain + htlc forms; the HTLC form reserves its claim outpoint on the SAME store.
