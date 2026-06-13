@@ -1,0 +1,19 @@
+[Unit]
+Description=exfer testnet autonomous settlement loop (quote -> settle -> honor)
+After=network-online.target exfer-walletd@a.service exfer-walletd@b.service exfer-indexer.service exfer-testnet-faucet.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=exfer
+WorkingDirectory=/opt/exfer-honor/examples/testnet-loop
+EnvironmentFile=/etc/exfer-testnet/loop.env
+ExecStart=/usr/bin/npx tsx loop.ts
+Restart=on-failure
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=exfer-testnet-loop
+
+[Install]
+WantedBy=multi-user.target

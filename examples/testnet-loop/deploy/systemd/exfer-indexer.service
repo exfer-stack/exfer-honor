@@ -1,0 +1,22 @@
+[Unit]
+Description=exfer indexer (testnet)
+After=network-online.target exfer-testnet-seed.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=exfer
+EnvironmentFile=/etc/exfer-testnet/indexer.env
+ExecStart=/usr/local/bin/exfer-indexer \
+  --node-rpc ${NODE_RPC} \
+  --datadir ${DATADIR} \
+  --bind ${BIND} \
+  --poll-secs ${POLL_SECS}
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=exfer-indexer
+
+[Install]
+WantedBy=multi-user.target

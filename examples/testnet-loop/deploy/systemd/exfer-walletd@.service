@@ -1,0 +1,26 @@
+[Unit]
+Description=exfer walletd instance %i (testnet)
+After=network-online.target exfer-testnet-seed.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=exfer
+# Per-instance config: /etc/exfer-testnet/walletd-a.env, walletd-b.env, walletd-f.env.
+# Each sets BIND, DATADIR, NODE_RPC, INDEXER_RPC, EXPECT_GENESIS and
+# WALLETD_KEYSTORE_PASSPHRASE.
+EnvironmentFile=/etc/exfer-testnet/walletd-%i.env
+ExecStart=/usr/local/bin/exfer-walletd \
+  --datadir ${DATADIR} \
+  --bind ${BIND} \
+  --node-rpc ${NODE_RPC} \
+  --indexer-rpc ${INDEXER_RPC} \
+  --expect-genesis ${EXPECT_GENESIS}
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=exfer-walletd-%i
+
+[Install]
+WantedBy=multi-user.target

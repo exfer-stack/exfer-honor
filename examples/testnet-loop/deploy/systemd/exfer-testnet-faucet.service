@@ -1,0 +1,20 @@
+[Unit]
+Description=exfer testnet faucet (HTTP drip)
+After=network-online.target exfer-walletd@f.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=exfer
+WorkingDirectory=/opt/exfer-honor/examples/testnet-faucet
+EnvironmentFile=/etc/exfer-testnet/faucet.env
+# npx resolves the pinned tsx from the example's node_modules (npm ci at deploy).
+ExecStart=/usr/bin/npx tsx faucet.ts
+Restart=on-failure
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=exfer-testnet-faucet
+
+[Install]
+WantedBy=multi-user.target

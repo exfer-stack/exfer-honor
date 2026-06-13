@@ -1,0 +1,25 @@
+[Unit]
+Description=exfer testnet node (secondary seed, relay only)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=exfer
+EnvironmentFile=/etc/exfer-testnet/node.env
+# A non-mining seed: peers with the primary and relays. PEERS is the primary
+# seed's IP:9333.
+ExecStart=/usr/local/bin/exfer-testnet node \
+  --bind ${BIND} \
+  --rpc-bind ${RPC_BIND} \
+  --datadir ${DATADIR} \
+  --peers ${PEERS}
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65536
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=exfer-testnet-node
+
+[Install]
+WantedBy=multi-user.target

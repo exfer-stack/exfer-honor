@@ -1,0 +1,27 @@
+[Unit]
+Description=exfer testnet seed node (real 2^252 PoW miner)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=exfer
+EnvironmentFile=/etc/exfer-testnet/seed.env
+# Mines to the treasury wallet that funds the faucet. PEERS may be empty on the
+# primary seed (it bootstraps from genesis after the zero-peer timeout) and is
+# set to the other seed's IP on the secondary.
+ExecStart=/usr/local/bin/exfer-testnet mine \
+  --bind ${BIND} \
+  --rpc-bind ${RPC_BIND} \
+  --datadir ${DATADIR} \
+  --wallet ${WALLET} \
+  ${EXTRA_ARGS}
+Restart=on-failure
+RestartSec=5
+LimitNOFILE=65536
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=exfer-testnet-seed
+
+[Install]
+WantedBy=multi-user.target
