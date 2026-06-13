@@ -21,9 +21,11 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-EXFER="${EXFER_BIN:-$HOME/exfer/target/release/exfer}"
-WALLETD="${WALLETD_BIN:-$HOME/crypto-due-dil/exfer-walletd/target/release/exfer-walletd}"
-INDEXER="${INDEXER_BIN:-$HOME/crypto-due-dil/exfer-indexer/target/release/exfer-indexer}"
+# Sibling repos resolve relative to this script; override any with *_BIN env.
+SIBLINGS="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+EXFER="${EXFER_BIN:-$SIBLINGS/exfer/target/release/exfer}"
+WALLETD="${WALLETD_BIN:-$SIBLINGS/exfer-walletd/target/release/exfer-walletd}"
+INDEXER="${INDEXER_BIN:-$SIBLINGS/exfer-indexer/target/release/exfer-indexer}"
 for bin in "$EXFER" "$WALLETD" "$INDEXER"; do
   [ -x "$bin" ] || { echo "FATAL: missing binary $bin (see header for env overrides)" >&2; exit 1; }
 done
