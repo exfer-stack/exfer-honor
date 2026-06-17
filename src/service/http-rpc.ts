@@ -38,6 +38,18 @@ interface JsonRpcEnvelope<R> {
  * raised as a `JsonRpcError` (code preserved). An optional bearer `token` is sent
  * as `Authorization: Bearer <token>`.
  */
+/** Transport-level retry policy. A public node behind a load balancer will
+ *  occasionally drop a keep-alive socket ("other side closed", ECONNRESET) or
+ *  answer 5xx while busy — these are transient and must NOT crash a long-running
+ *  observe→depth→honor loop that polls every couple of seconds. We retry the
+ *  fetch a few times with linear backoff. We deliberately do NOT retry a
+ *  `JsonRpcError` (an application-level `error` member like -32602 strict-decode
+ *  or -32601 unknown-method): those are terminal and must propagate unchanged so
+ *  the adapters' transient-vs-terminal rules (§3.6) still bite. */
+const RPC_MAX_ATTEMPTS = 5;
+const RPC_BACKOFF_MS = 400;
+const sleep = (ms: number) => new Promise<void>((r) => setTimeout(r, ms));
+
 export function httpJsonRpc(url: string, token?: string): JsonRpc {
   let nextId = 1;
   return {
@@ -48,25 +60,46 @@ export function httpJsonRpc(url: string, token?: string): JsonRpc {
       if (token !== undefined) {
         headers.authorization = `Bearer ${token}`;
       }
-      const res = await fetch(url, {
-        method: "POST",
-        headers,
-        body: JSON.stringify({ jsonrpc: "2.0", id: nextId++, method, params }),
-      });
-      if (!res.ok) {
-        // A transport-level non-2xx is NOT a strict-decode fault — surface it as a
-        // plain Error so the adapters classify it as a retryable transient fault.
-        throw new Error(`JSON-RPC HTTP ${res.status} from ${url} for ${method}`);
+      const body = JSON.stringify({ jsonrpc: "2.0", id: nextId++, method, params });
+      let lastErr: unknown;
+      for (let attempt = 1; attempt <= RPC_MAX_ATTEMPTS; attempt++) {
+        try {
+          const res = await fetch(url, { method: "POST", headers, body });
+          if (!res.ok) {
+            // A transport-level non-2xx is NOT a strict-decode fault. 5xx is a
+            // busy/transient node — retry; a 4xx is unexpected for JSON-RPC
+            // (errors arrive in the envelope) so don't spin on it.
+            const e = new Error(`JSON-RPC HTTP ${res.status} from ${url} for ${method}`);
+            if (res.status >= 500 && attempt < RPC_MAX_ATTEMPTS) {
+              lastErr = e;
+              await sleep(RPC_BACKOFF_MS * attempt);
+              continue;
+            }
+            throw e;
+          }
+          const env = (await res.json()) as JsonRpcEnvelope<R>;
+          if (env.error !== undefined && env.error !== null) {
+            throw new JsonRpcError(
+              env.error.message ?? `JSON-RPC error from ${method}`,
+              env.error.code,
+              env.error.data,
+            );
+          }
+          return env.result as R;
+        } catch (err) {
+          // Terminal application error — propagate immediately, never retry.
+          if (err instanceof JsonRpcError) throw err;
+          // Network-level fault (dropped socket, DNS, connection refused): retry.
+          lastErr = err;
+          if (attempt < RPC_MAX_ATTEMPTS) {
+            await sleep(RPC_BACKOFF_MS * attempt);
+            continue;
+          }
+        }
       }
-      const env = (await res.json()) as JsonRpcEnvelope<R>;
-      if (env.error !== undefined && env.error !== null) {
-        throw new JsonRpcError(
-          env.error.message ?? `JSON-RPC error from ${method}`,
-          env.error.code,
-          env.error.data,
-        );
-      }
-      return env.result as R;
+      throw lastErr instanceof Error
+        ? lastErr
+        : new Error(`JSON-RPC call ${method} to ${url} failed after ${RPC_MAX_ATTEMPTS} attempts`);
     },
   };
 }
