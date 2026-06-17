@@ -2,8 +2,9 @@
 
 This is the [devnet-loop](../devnet-loop) demo run for keeps: the **same** closed
 loop, but against the **live Exfer mainnet** — real public node, real indexer,
-real on-chain payment, real atomic delivery. No human clicks a button anywhere in
-it.
+real on-chain payment, real atomic delivery — no per-transaction approval, no
+escrow operator, no human releasing the goods. (The buyer's wallet is pre-funded
+once; in production an agent can even mine its own starting EXFER.)
 
 ```
   Agent A (seller)                         Agent B (buyer)
